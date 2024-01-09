@@ -34,89 +34,110 @@ Entity Framework (EF) is an Object-Relational Mapping (ORM) framework developed 
 ### Setting Up Entity Framework:
 
 1. **Install Entity Framework:**
+   - Right-click on your project in Visual Studio.
+   - Select "Manage NuGet Packages."
+   - Search for "Microsoft.EntityFrameworkCore" and install the package.
 
-   - Open the NuGet Package Manager Console and run the following command:
-     ```bash
-     Install-Package Microsoft.EntityFrameworkCore
-     ```
+```csharp
+// Install Entity Framework
+// Right-click on your project in Visual Studio.
+// Select "Manage NuGet Packages."
+// Search for "Microsoft.EntityFrameworkCore" and install the package.
+using Microsoft.EntityFrameworkCore;
+```
 
 2. **Create a DbContext Class:**
-
    - In your project, create a class that inherits from `DbContext`. This class represents your database session.
+   - Configure the database connection in the `OnConfiguring` method.
 
-   ```csharp
-   using Microsoft.EntityFrameworkCore;
+```csharp
+// Create a DbContext Class
+// This class represents a session with the database
+public class MyDbContext : DbContext
+{
+    // DbSet properties represent database tables
+    public DbSet<User> Users { get; set; }
 
-   public class MyDbContext : DbContext
-   {
-       // DbSet properties represent database tables
-       public DbSet<User> Users { get; set; }
-
-       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-       {
-           // Configure the database connection
-           optionsBuilder.UseSqlServer("your_connection_string");
-       }
-   }
-   ```
+    // This method is called to configure the database connection
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        // Configure the database connection string here
+        optionsBuilder.UseSqlServer("your_connection_string");
+    }
+}
+```
 
 ### Performing CRUD Operations:
 
 3. **Define Entity Classes:**
-
    - Create classes that represent your entities. These classes will be used to interact with the database.
 
-   ```csharp
-   public class User
-   {
-       public int Id { get; set; }
-       public string FirstName { get; set; }
-       public string LastName { get; set; }
-   }
-   ```
+```csharp
+// Define Entity Classes
+// This class represents an entity in the "Users" table
+public class User
+{
+    // This property represents the primary key in the "Users" table
+    public int Id { get; set; }
+
+    // These properties represent columns in the "Users" table
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+}
+```
 
 4. **Querying Data:**
-
    - Use LINQ to query data from the database.
 
-   ```csharp
-   using (var context = new MyDbContext())
-   {
-       var users = context.Users.Where(u => u.FirstName == "John").ToList();
-   }
-   ```
+```csharp
+// Querying Data
+// Create a new DbContext instance
+using (var context = new MyDbContext())
+{
+    // Use LINQ to query data from the "Users" table
+    var users = context.Users.Where(u => u.FirstName == "John").ToList();
+}
+```
 
 5. **Adding and Updating Data:**
-
    - Add new entities or update existing ones and persist the changes to the database.
 
-   ```csharp
-   using (var context = new MyDbContext())
-   {
-       var newUser = new User { FirstName = "Jane", LastName = "Doe" };
-       context.Users.Add(newUser);
+```csharp
+// Adding and Updating Data
+// Create a new DbContext instance
+using (var context = new MyDbContext())
+{
+    // Add a new user to the "Users" table
+    var newUser = new User { FirstName = "Jane", LastName = "Doe" };
+    context.Users.Add(newUser);
 
-       // Update an existing user
-       var existingUser = context.Users.Find(1);
-       existingUser.LastName = "UpdatedLastName";
+    // Update an existing user in the "Users" table
+    var existingUser = context.Users.Find(1);
+    existingUser.LastName = "UpdatedLastName";
 
-       context.SaveChanges();
-   }
-   ```
+    // Save changes to the database
+    context.SaveChanges();
+}
+```
 
 6. **Deleting Data:**
-
    - Remove entities from the database.
 
-   ```csharp
-   using (var context = new MyDbContext())
-   {
-       var userToDelete = context.Users.Find(2);
-       context.Users.Remove(userToDelete);
+```csharp
+// Deleting Data
+// Create a new DbContext instance
+using (var context = new MyDbContext())
+{
+    // Find the user with Id = 2 in the "Users" table
+    var userToDelete = context.Users.Find(2);
 
-       context.SaveChanges();
-   }
-   ```
+    // Remove the user from the "Users" table
+    context.Users.Remove(userToDelete);
+
+    // Save changes to the database
+    context.SaveChanges();
+}
+```
 
 ## Exercise Problems:
 
