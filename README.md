@@ -162,8 +162,8 @@ using (var context = new Testdb())
     var newUser = new User { FirstName = "Jane", LastName = "Doe" };
     context.Users.Add(newUser);
 
-    // Update an existing user in the "Users" table
-    var existingUser = context.Users.Find(1);
+    // Update an existing user in the "Users" table (if one existed)
+    var existingUser = context.Users.Find(1); //Using the Id
     existingUser.LastName = "UpdatedLastName";
 
     // Save changes to the database
@@ -192,7 +192,7 @@ using (var context = new Testdb())
 // Create a new DbContext instance
 using (var context = new Testdb())
 {
-    // Find the user with Id = 2 in the "Users" table
+    // Find the user with Id = 1 in the "Users" table
     var userToDelete = context.Users.Find(1);
 
     // Remove the user from the "Users" table
