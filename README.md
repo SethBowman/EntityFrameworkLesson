@@ -6,56 +6,56 @@ Entity Framework (EF) is an Object-Relational Mapping (ORM) framework developed 
 
 ### Key Concepts in Entity Framework:
 
-1. **Entities:** Represent the data model and are typically mapped to database tables.
-2. **DbContext:** Represents a session with the database and allows you to query and save data.
-3. **Mappings:** Define the relationship between entities and database tables.
+- **Entities:** Represent the data model and are typically mapped to database tables.
+- **DbContext:** Represents a session with the database and allows you to query and save data.
+- **Mappings:** Define the relationship between entities and database tables.
 
 ## Prerequisites:
 
 Before getting started with Entity Framework, make sure you have the following installed:
 
-1. **Microsoft SQL Server:**
+- **Microsoft SQL Server:**
 
-   - Install the free Developer Edition from [Microsoft SQL Server Downloads](https://www.microsoft.com/en-us/sql-server/sql-server-downloads).
+  - Install the free Developer Edition from [Microsoft SQL Server Downloads](https://www.microsoft.com/en-us/sql-server/sql-server-downloads).
 
-2. **SQL Server Management Studio (SSMS):**
-   - Download and install SSMS from [SQL Server Management Studio](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16).
-   - Open SSMS and connect to the server by typing "localhost" as the server.
+- **SQL Server Management Studio (SSMS):**
+  - Download and install SSMS from [SQL Server Management Studio](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16).
+  - Open SSMS and connect to the server by typing "localhost" as the server.
 
 ## Why Use Entity Framework?
 
-### 1. Abstraction of Database Logic:
+**Abstraction of Database Logic:**
 
 - Entity Framework abstracts away the complexity of database interactions, allowing developers to focus on business logic rather than database operations.
 - It eliminates the need to write raw SQL queries, making the code more readable and maintainable.
 
-### 2. Rapid Development:
+**Rapid Development:**
 
 - EF enables rapid development by providing a code-first approach where you define your data model using C# classes, and the database schema is generated automatically.
 
-### 3. Cross-Database Compatibility:
+**Cross-Database Compatibility:**
 
 - Entity Framework supports various database systems, making it easy to switch between databases without changing your application code.
 
-### 4. Change Tracking:
+**Change Tracking:**
 
 - EF tracks changes to entities, and with a single call, you can persist those changes to the database. This reduces the amount of boilerplate code required for data manipulation.
 
 ## How to Use Entity Framework in a Console Application
 
-### Setting Up Entity Framework:
+**Setting Up Entity Framework:**
 
-1. **Install Entity Framework Core Tools:**
-   - Right-click on your project in Visual Studio.
-   - Select "Manage NuGet Packages."
-   - Install the following packages:
-     - `Microsoft.EntityFrameworkCore.Design`
-     - `Microsoft.EntityFrameworkCore.Tools`
-     - `Microsoft.EntityFrameworkCore.SqlServer`
-     - `Microsoft.Extensions.Configuration.Json`
+- **Install Entity Framework Core Tools:**
+  - Right-click on your project in Visual Studio.
+  - Select "Manage NuGet Packages."
+  - Install the following packages:
+    - `Microsoft.EntityFrameworkCore.Design`
+    - `Microsoft.EntityFrameworkCore.Tools`
+    - `Microsoft.EntityFrameworkCore.SqlServer`
+    - `Microsoft.Extensions.Configuration.Json`
 
 ```csharp
-// Step 1: Install Entity Framework Core Tools
+// Install Entity Framework Core Tools
 // Right-click on your project in Visual Studio.
 // Select "Manage NuGet Packages."
 // Install the following packages:
@@ -65,12 +65,31 @@ Before getting started with Entity Framework, make sure you have the following i
 // - Microsoft.Extensions.Configuration.Json
 ```
 
-2. **Create a DbContext Class:**
-   - In your project, create a class that inherits from `DbContext`. This class represents your database session.
-   - Configure the database connection in the `OnConfiguring` method.
+**User Model:**
+
+- **Create User Model:**
+  - Define a class that represents the "Users" entity.
 
 ```csharp
-// Step 2: Create a DbContext Class
+// Create User Model
+// This class represents an entity in the "Users" table
+public class User
+{
+    // This property represents the primary key in the "Users" table
+    public int Id { get; set; }
+
+    // These properties represent columns in the "Users" table
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+}
+```
+
+- **Create a DbContext Class:**
+  - In your project, create a class that inherits from `DbContext`. This class represents your database session.
+  - Configure the database connection in the `OnConfiguring` method.
+
+```csharp
+// Create a DbContext Class
 // This class represents a session with the database
 public class Testdb : DbContext
 {
@@ -92,28 +111,9 @@ public class Testdb : DbContext
 }
 ```
 
-### User Model:
+**Appsettings.json File:**
 
-3. **Create User Model:**
-   - Define a class that represents the "Users" entity.
-
-```csharp
-// Step 3: Create User Model
-// This class represents an entity in the "Users" table
-public class User
-{
-    // This property represents the primary key in the "Users" table
-    public int Id { get; set; }
-
-    // These properties represent columns in the "Users" table
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-}
-```
-
-### Appsettings.json File:
-
-Create an `appsettings.json` file in your project with the following content:
+- Create an `appsettings.json` file in your project with the following content:
 
 ```json
 {
@@ -123,51 +123,38 @@ Create an `appsettings.json` file in your project with the following content:
 }
 ```
 
-### .gitignore File:
+**.gitignore File:**
 
-4. **Create .gitignore File:**
-   - Create a `.gitignore` file in your project and exclude `appsettings.json` under "user specific files."
+- **Create .gitignore File:**
+  - Create a `.gitignore` file in your project and exclude `appsettings.json` under "user specific files."
 
 ```plaintext
-# .gitignore
+# Create .gitignore File
+# Create a .gitignore file in your project and exclude appsettings.json under "user specific files."
 # ...
 
 # User-specific files
 appsettings.json
 ```
 
-### Creating the Database:
+**Creating the Database:**
 
-5. **Create Database from the IDE:**
+- **Create Database from the IDE:**
+  - Open the Package Manager Console. (Tools > NuGet Package Manager > Package Manager Console)
+  - Run the following commands:
+    ```bash
+    Add-Migration InitialCreate
+    Update-Database
+    ```
+    This will generate a migration file based on your model and apply the migration to create the database.
 
-   - Open the Package Manager Console.
-   - Run the following commands:
-     ```bash
-     Add-Migration InitialCreate
-     Update-Database
-     ```
-     This will generate a migration file based on your model and apply the migration to create the database.
+**Performing CRUD Operations:**
 
-### Performing CRUD Operations:
-
-6. **Querying Data:**
-   - Use LINQ to query data from the database.
-
-```csharp
-// Step 6: Querying Data
-// Create a new DbContext instance
-using (var context = new Testdb())
-{
-    // Use LINQ to query data from the "Users" table
-    var users = context.Users.Where(u => u.FirstName == "John").ToList();
-}
-```
-
-7. **Adding and Updating Data:**
-   - Add new entities or update existing ones and persist the changes to the database.
+- **Adding and Updating Data:**
+  - Add new entities or update existing ones and persist the changes to the database.
 
 ```csharp
-// Step 7: Adding and Updating Data
+// Adding and Updating Data
 // Create a new DbContext instance
 using (var context = new Testdb())
 {
@@ -184,16 +171,29 @@ using (var context = new Testdb())
 }
 ```
 
-8. **Deleting Data:**
-   - Remove entities from the database.
+- **Querying Data:**
+  - Use LINQ to query data from the database.
 
 ```csharp
-// Step 8: Deleting Data
+// Querying Data
+// Create a new DbContext instance
+using (var context = new Testdb())
+{
+    // Use LINQ to query data from the "Users" table
+    var users = context.Users.Where(u => u.FirstName == "Jane").ToList();
+}
+```
+
+- **Deleting Data:**
+  - Remove entities from the database.
+
+```csharp
+// Deleting Data
 // Create a new DbContext instance
 using (var context = new Testdb())
 {
     // Find the user with Id = 2 in the "Users" table
-    var userToDelete = context.Users.Find(2);
+    var userToDelete = context.Users.Find(1);
 
     // Remove the user from the "Users" table
     context.Users.Remove(userToDelete);
@@ -203,21 +203,21 @@ using (var context = new Testdb())
 }
 ```
 
-## Exercise Problems:
+**Exercise Problems:**
 
-### Exercise 1:
+- **Exercise 1:**
 
-Create a new console application and set up a `DbContext` class representing a simple "Product" entity with properties like Id, Name, and Price. Perform the following actions:
+  - Create a new console application and set up a `DbContext` class representing a simple "Product" entity with properties like Id, Name, and Price. Perform the following actions:
+    - Add three products to the database.
+    - Query and display the products with a price higher than a specified value.
 
-- Add three products to the database.
-- Query and display the products with a price higher than a specified value.
+- \*\*Exercise
 
-### Exercise 2:
+2:\*\*
 
-Extend the previous application to update the price of one of the products. After updating, query and display all products in the database.
+- Extend the previous application to update the price of one of the products. After updating, query and display all products in the database.
 
-### Exercise 3:
-
-Implement a deletion operation in the application. Choose one of the products and delete it from the database. Query and display the remaining products.
+- **Exercise 3:**
+  - Implement a deletion operation in the application. Choose one of the products and delete it from the database. Query and display the remaining products.
 
 Feel free to explore additional features of Entity Framework to enhance your understanding.
