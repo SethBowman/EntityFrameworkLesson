@@ -205,17 +205,18 @@ using (var context = new Testdb())
 
 **Exercise Problems:**
 
-- **Exercise 1:**
+**Exercise 1:**
 
-  - Create a new console application and set up a `DbContext` class representing a simple "Product" entity with properties like Id, Name, and Price. Perform the following actions:
-    - Add three products to the database.
-    - Query and display the products with a price higher than a specified value.
+- Create a new console application and set up a `DbContext` class representing a simple "Product" entity with properties like Id, Name, and Price. Perform the following actions:
+  - Add three products to the database.
+  - Query and display the products with a price higher than a specified value.
 
-- **Exercise 2:**
+**Exercise 2:**
 
 - Extend the previous application to update the price of one of the products. After updating, query and display all products in the database.
 
-- **Exercise 3:**
-  - Implement a deletion operation in the application. Choose one of the products and delete it from the database. Query and display the remaining products.
+**Exercise 3:**
+
+- Implement a deletion operation in the application. Choose one of the products and delete it from the database. Query and display the remaining products.
 
 Feel free to explore additional features of Entity Framework to enhance your understanding.
