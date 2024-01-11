@@ -41,7 +41,7 @@ Before getting started with Entity Framework, make sure you have the following i
 
 - EF tracks changes to entities, and with a single call, you can persist those changes to the database. This reduces the amount of boilerplate code required for data manipulation.
 
-## How to Use Entity Framework
+## How to Use Entity Framework in a Console Application
 
 ### Setting Up Entity Framework:
 
@@ -139,6 +139,7 @@ appsettings.json
 ### Creating the Database:
 
 5. **Create Database from the IDE:**
+
    - Open the Package Manager Console.
    - Run the following commands:
      ```bash
@@ -171,9 +172,7 @@ using (var context = new Testdb())
 using (var context = new Testdb())
 {
     // Add a new user to the "Users" table
-    var newUser = new User { FirstName = "Jane", LastName = "D
-
-oe" };
+    var newUser = new User { FirstName = "Jane", LastName = "Doe" };
     context.Users.Add(newUser);
 
     // Update an existing user in the "Users" table
