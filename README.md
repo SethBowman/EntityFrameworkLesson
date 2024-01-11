@@ -10,6 +10,18 @@ Entity Framework (EF) is an Object-Relational Mapping (ORM) framework developed 
 2. **DbContext:** Represents a session with the database and allows you to query and save data.
 3. **Mappings:** Define the relationship between entities and database tables.
 
+## Prerequisites:
+
+Before getting started with Entity Framework, make sure you have the following installed:
+
+1. **Microsoft SQL Server:**
+
+   - Install the free Developer Edition from [Microsoft SQL Server Downloads](https://www.microsoft.com/en-us/sql-server/sql-server-downloads).
+
+2. **SQL Server Management Studio (SSMS):**
+   - Download and install SSMS from [SQL Server Management Studio](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16).
+   - Open SSMS and connect to the server by typing "localhost" as the server.
+
 ## Why Use Entity Framework?
 
 ### 1. Abstraction of Database Logic:
@@ -159,7 +171,9 @@ using (var context = new Testdb())
 using (var context = new Testdb())
 {
     // Add a new user to the "Users" table
-    var newUser = new User { FirstName = "Jane", LastName = "Doe" };
+    var newUser = new User { FirstName = "Jane", LastName = "D
+
+oe" };
     context.Users.Add(newUser);
 
     // Update an existing user in the "Users" table
