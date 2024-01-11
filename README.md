@@ -33,17 +33,24 @@ Entity Framework (EF) is an Object-Relational Mapping (ORM) framework developed 
 
 ### Setting Up Entity Framework:
 
-1. **Install Entity Framework:**
+1. **Install Entity Framework Core Tools:**
    - Right-click on your project in Visual Studio.
    - Select "Manage NuGet Packages."
-   - Search for "Microsoft.EntityFrameworkCore" and install the package.
+   - Install the following packages:
+     - `Microsoft.EntityFrameworkCore.Design`
+     - `Microsoft.EntityFrameworkCore.Tools`
+     - `Microsoft.EntityFrameworkCore.SqlServer`
+     - `Microsoft.Extensions.Configuration.Json`
 
 ```csharp
-// Install Entity Framework
+// Step 1: Install Entity Framework Core Tools
 // Right-click on your project in Visual Studio.
 // Select "Manage NuGet Packages."
-// Search for "Microsoft.EntityFrameworkCore" and install the package.
-using Microsoft.EntityFrameworkCore;
+// Install the following packages:
+// - Microsoft.EntityFrameworkCore.Design
+// - Microsoft.EntityFrameworkCore.Tools
+// - Microsoft.EntityFrameworkCore.SqlServer
+// - Microsoft.Extensions.Configuration.Json
 ```
 
 2. **Create a DbContext Class:**
@@ -51,9 +58,9 @@ using Microsoft.EntityFrameworkCore;
    - Configure the database connection in the `OnConfiguring` method.
 
 ```csharp
-// Create a DbContext Class
+// Step 2: Create a DbContext Class
 // This class represents a session with the database
-public class MyDbContext : DbContext
+public class Testdb : DbContext
 {
     // DbSet properties represent database tables
     public DbSet<User> Users { get; set; }
@@ -61,19 +68,25 @@ public class MyDbContext : DbContext
     // This method is called to configure the database connection
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        // Load connection string from appsettings.json
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+
         // Configure the database connection string here
-        optionsBuilder.UseSqlServer("your_connection_string");
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
     }
 }
 ```
 
-### Performing CRUD Operations:
+### User Model:
 
-3. **Define Entity Classes:**
-   - Create classes that represent your entities. These classes will be used to interact with the database.
+3. **Create User Model:**
+   - Define a class that represents the "Users" entity.
 
 ```csharp
-// Define Entity Classes
+// Step 3: Create User Model
 // This class represents an entity in the "Users" table
 public class User
 {
@@ -86,26 +99,64 @@ public class User
 }
 ```
 
-4. **Querying Data:**
+### Appsettings.json File:
+
+Create an `appsettings.json` file in your project with the following content:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=localhost;Initial Catalog=Testdb;Integrated Security=True;Encrypt=False"
+  }
+}
+```
+
+### .gitignore File:
+
+4. **Create .gitignore File:**
+   - Create a `.gitignore` file in your project and exclude `appsettings.json` under "user specific files."
+
+```plaintext
+# .gitignore
+# ...
+
+# User-specific files
+appsettings.json
+```
+
+### Creating the Database:
+
+5. **Create Database from the IDE:**
+   - Open the Package Manager Console.
+   - Run the following commands:
+     ```bash
+     Add-Migration InitialCreate
+     Update-Database
+     ```
+     This will generate a migration file based on your model and apply the migration to create the database.
+
+### Performing CRUD Operations:
+
+6. **Querying Data:**
    - Use LINQ to query data from the database.
 
 ```csharp
-// Querying Data
+// Step 6: Querying Data
 // Create a new DbContext instance
-using (var context = new MyDbContext())
+using (var context = new Testdb())
 {
     // Use LINQ to query data from the "Users" table
     var users = context.Users.Where(u => u.FirstName == "John").ToList();
 }
 ```
 
-5. **Adding and Updating Data:**
+7. **Adding and Updating Data:**
    - Add new entities or update existing ones and persist the changes to the database.
 
 ```csharp
-// Adding and Updating Data
+// Step 7: Adding and Updating Data
 // Create a new DbContext instance
-using (var context = new MyDbContext())
+using (var context = new Testdb())
 {
     // Add a new user to the "Users" table
     var newUser = new User { FirstName = "Jane", LastName = "Doe" };
@@ -120,13 +171,13 @@ using (var context = new MyDbContext())
 }
 ```
 
-6. **Deleting Data:**
+8. **Deleting Data:**
    - Remove entities from the database.
 
 ```csharp
-// Deleting Data
+// Step 8: Deleting Data
 // Create a new DbContext instance
-using (var context = new MyDbContext())
+using (var context = new Testdb())
 {
     // Find the user with Id = 2 in the "Users" table
     var userToDelete = context.Users.Find(2);
