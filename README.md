@@ -211,9 +211,7 @@ using (var context = new Testdb())
     - Add three products to the database.
     - Query and display the products with a price higher than a specified value.
 
-- \*\*Exercise
-
-2:\*\*
+- **Exercise 2:**
 
 - Extend the previous application to update the price of one of the products. After updating, query and display all products in the database.
 
