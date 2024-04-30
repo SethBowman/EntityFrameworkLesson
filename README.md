@@ -56,21 +56,14 @@ Before getting started with Entity Framework in Visual Studio Code, make sure yo
    - Choose "Console Application" and press Enter.
    - Enter a project name and select a location to save the project.
 
-3. **Install Entity Framework Core Package:**
-
+3. **Install Entity Framework Core Packages:**
    - Open Visual Studio Code.
    - Click on the Extensions view by clicking on the square icon on the sidebar or pressing Ctrl+Shift+X.
-   - Search for "Visual NuGet" and install it.
-   - After installing Visual NuGet, use it to install the following NuGet packages:
+   - Search for "Visual NuGet" in the Extensions view search box and install it.
+   - Use Visual NuGet to install the following NuGet packages:
      - `Microsoft.EntityFrameworkCore`: The main Entity Framework Core package.
      - `Pomelo.EntityFrameworkCore.MySql`: Allows Entity Framework to interact with MySQL.
      - `Microsoft.EntityFrameworkCore.Tools`: Provides additional tools for working with Entity Framework in .NET.
-
-   To install NuGet packages with Visual NuGet:
-
-   - Click on the Extensions view in Visual Studio Code.
-   - Search for the package name (e.g., "Microsoft.EntityFrameworkCore").
-   - Select the correct package and click "Install" to add it to your project.
 
 ## Creating the DbContext Class:
 
@@ -81,14 +74,13 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-// Create a DbContext Class
 // This class represents a session with the database
 public class Testdb : DbContext
 {
-    // DbSet properties represent database tables
+    // Represents a table in the database
     public DbSet<User> Users { get; set; }
 
-    // This method is called to configure the database connection
+    // Configures the database connection
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Load connection string from appsettings.json
@@ -104,38 +96,54 @@ public class Testdb : DbContext
 }
 ```
 
-**User Model (User.cs):**
+## User Model (User.cs):
 
 ```csharp
 using System;
 
-// Create User Model
 // This class represents an entity in the "Users" table
 public class User
 {
-    // This property represents the primary key in the "Users" table
+    // Represents the primary key in the "Users" table
     public int Id { get; set; }
 
-    // These properties represent columns in the "Users" table
-    public string FirstName { get; set;
+    // Represents columns in the "Users" table
+    public string FirstName { get; set; }
     public string Last Name { get; set;
 }
 ```
 
-**Appsettings.json File:**
+## Appsettings.json File:
+
+- Create an `appsettings.json` file in your project with the following content:
 
 ```json
 {
-  // Create appsettings.json File
-  // This file stores application settings, including the database connection string
-
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Database=Testdb;User=root;Password=your_password"
   }
 }
 ```
 
-**.gitignore File:**
+**Ensure `appsettings.json` is copied to the output directory if it changes:**
+
+- Open the `.csproj` file in your Visual Studio Code project.
+- Add an `ItemGroup` section with the following content:
+
+```xml
+<ItemGroup>
+  <None Update="appsettings.json">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
+```
+
+This XML snippet in your project file ensures that `appsettings.json` is copied to the output directory only if it's newer than the existing copy.
+
+## .gitignore File:
+
+- **Create .gitignore File:**
+  - Create a `.gitignore` file in your project and exclude `appsettings.json` under "user specific files."
 
 ```plaintext
 # Create .gitignore File
