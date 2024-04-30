@@ -1,4 +1,4 @@
-# Lesson: Introduction to C# Entity Framework
+# Lesson: Introduction to C# Entity Framework in Visual Studio Code
 
 ## What is Entity Framework?
 
@@ -10,85 +10,77 @@ Entity Framework (EF) is an Object-Relational Mapping (ORM) framework developed 
 - **DbContext:** Represents a session with the database and allows you to query and save data.
 - **Mappings:** Define the relationship between entities and database tables.
 
-## Prerequisites:
-
-Before getting started with Entity Framework, make sure you have the following installed:
-
-- **Microsoft SQL Server:**
-
-  - Install the free Developer Edition from [Microsoft SQL Server Downloads](https://www.microsoft.com/en-us/sql-server/sql-server-downloads).
-
-- **SQL Server Management Studio (SSMS):**
-  - Download and install SSMS from [SQL Server Management Studio](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16).
-  - Open SSMS and connect to the server by typing "localhost" as the server.
-
 ## Why Use Entity Framework?
 
-**Abstraction of Database Logic:**
+Entity Framework provides various benefits, including abstraction of database logic, rapid development, cross-database compatibility, and change tracking. These features allow you to focus on business logic without worrying about complex database operations.
 
-- Entity Framework abstracts away the complexity of database interactions, allowing developers to focus on business logic rather than database operations.
-- It eliminates the need to write raw SQL queries, making the code more readable and maintainable.
+## Prerequisites:
 
-**Rapid Development:**
+Before getting started with Entity Framework in Visual Studio Code, make sure you have the following installed:
 
-- EF enables rapid development by providing a code-first approach where you define your data model using C# classes, and the database schema is generated automatically.
+- **.NET SDK:**
 
-**Cross-Database Compatibility:**
+  - Install the .NET SDK from [dotnet.microsoft.com](https://dotnet.microsoft.com/download).
 
-- Entity Framework supports various database systems, making it easy to switch between databases without changing your application code.
+- **Visual Studio Code:**
+  - Download and install Visual Studio Code from [code.visualstudio.com](https://code.visualstudio.com/).
+- **Visual Studio Code Extensions:**
 
-**Change Tracking:**
+  - Open Visual Studio Code.
+  - Go to the Extensions view by clicking on the square icon on the sidebar or pressing Ctrl+Shift+X.
+  - Install the following extensions:
+    - `.NET Install Tool for Visual Studio Code`: Provides .NET SDK installation capabilities.
+    - `C# for Visual Studio Code (powered by OmniSharp)`: Adds C# support.
+    - `C# Dev Kit`: Additional features for C# development.
+    - `Visual NuGet`: Allows you to manage NuGet packages.
 
-- EF tracks changes to entities, and with a single call, you can persist those changes to the database. This reduces the amount of boilerplate code required for data manipulation.
+- **MySQL Server and Workbench:**
+  - Install MySQL Server from [MySQL Downloads](https://dev.mysql.com/downloads/mysql/). Choose the appropriate version for your system.
+  - Install MySQL Workbench from [MySQL Workbench Downloads](https://dev.mysql.com/downloads/workbench/).
 
-## How to Use Entity Framework in a Console Application
+## Setting Up Entity Framework:
 
-**Setting Up Entity Framework:**
+1. **Install .NET EF Tool:**
 
-- **Install Entity Framework Core Tools:**
-  - Right-click on your project in Visual Studio.
-  - Select "Manage NuGet Packages."
-  - Install the following packages:
-    - `Microsoft.EntityFrameworkCore.Design`
-    - `Microsoft.EntityFrameworkCore.Tools`
-    - `Microsoft.EntityFrameworkCore.SqlServer`
-    - `Microsoft.Extensions.Configuration.Json`
+   - Open Visual Studio Code.
+   - Click on the Extensions view by clicking on the square icon on the sidebar or pressing Ctrl+Shift+X.
+   - Search for ".NET Core SDK" in the Extensions view search box.
+   - Look for ".NET Core SDK" by Microsoft and click Install.
+
+2. **Create a .NET Console Application:**
+
+   - Create a new directory for your project.
+   - Open Visual Studio Code and navigate to the directory.
+   - Press Ctrl+Shift+P to open the Command Palette.
+   - Type "Create New Project" and select ".NET: Create New Project".
+   - Choose "Console Application" and press Enter.
+   - Enter a project name and select a location to save the project.
+
+3. **Install Entity Framework Core Package:**
+
+   - Open Visual Studio Code.
+   - Click on the Extensions view by clicking on the square icon on the sidebar or pressing Ctrl+Shift+X.
+   - Search for "Visual NuGet" and install it.
+   - After installing Visual NuGet, use it to install the following NuGet packages:
+     - `Microsoft.EntityFrameworkCore`: The main Entity Framework Core package.
+     - `Pomelo.EntityFrameworkCore.MySql`: Allows Entity Framework to interact with MySQL.
+     - `Microsoft.EntityFrameworkCore.Tools`: Provides additional tools for working with Entity Framework in .NET.
+
+   To install NuGet packages with Visual NuGet:
+
+   - Click on the Extensions view in Visual Studio Code.
+   - Search for the package name (e.g., "Microsoft.EntityFrameworkCore").
+   - Select the correct package and click "Install" to add it to your project.
+
+## Creating the DbContext Class:
+
+- **Create DbContext Class (Testdb.cs):**
 
 ```csharp
-// Install Entity Framework Core Tools
-// Right-click on your project in Visual Studio.
-// Select "Manage NuGet Packages."
-// Install the following packages:
-// - Microsoft.EntityFrameworkCore.Design
-// - Microsoft.EntityFrameworkCore.Tools
-// - Microsoft.EntityFrameworkCore.SqlServer
-// - Microsoft.Extensions.Configuration.Json
-```
+using System.IO;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
-**User Model:**
-
-- **Create User Model:**
-  - Define a class that represents the "Users" entity.
-
-```csharp
-// Create User Model
-// This class represents an entity in the "Users" table
-public class User
-{
-    // This property represents the primary key in the "Users" table
-    public int Id { get; set; }
-
-    // These properties represent columns in the "Users" table
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-}
-```
-
-- **Create a DbContext Class:**
-  - In your project, create a class that inherits from `DbContext`. This class represents your database session.
-  - Configure the database connection in the `OnConfiguring` method.
-
-```csharp
 // Create a DbContext Class
 // This class represents a session with the database
 public class Testdb : DbContext
@@ -100,123 +92,107 @@ public class Testdb : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Load connection string from appsettings.json
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
+        IConfigurationRoot configuration =
+            new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-        // Configure the database connection string here
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        // Configure the database connection for MySQL
+        optionsBuilder.UseMySQL(configuration.GetConnectionString("DefaultConnection"));
     }
+}
+```
+
+**User Model (User.cs):**
+
+```csharp
+using System;
+
+// Create User Model
+// This class represents an entity in the "Users" table
+public class User
+{
+    // This property represents the primary key in the "Users" table
+    public int Id { get; set; }
+
+    // These properties represent columns in the "Users" table
+    public string FirstName { get; set;
+    public string Last Name { get; set;
 }
 ```
 
 **Appsettings.json File:**
 
-- Create an `appsettings.json` file in your project with the following content:
-
 ```json
 {
+  // Create appsettings.json File
+  // This file stores application settings, including the database connection string
+
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=localhost;Initial Catalog=Testdb;Integrated Security=True;Encrypt=False"
+    "DefaultConnection": "Server=localhost;Database=Testdb;User=root;Password=your_password"
   }
 }
 ```
 
 **.gitignore File:**
 
-- **Create .gitignore File:**
-  - Create a `.gitignore` file in your project and exclude `appsettings.json` under "user specific files."
-
 ```plaintext
 # Create .gitignore File
-# Create a .gitignore file in your project and exclude appsettings.json under "user specific files."
-# ...
+# This file tells Git which files or folders to ignore when pushing to a repository
+# This prevents sensitive files, like appsettings.json, from being uploaded to the repository
+
+# Build and object files
+bin/
+obj/
+
+# .NET user-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
 
 # User-specific files
 appsettings.json
 ```
 
-**Creating the Database:**
+## Creating the Database:
 
-- **Create Database from the IDE:**
-  - Open the Package Manager Console. (Tools > NuGet Package Manager > Package Manager Console)
+- **Create Database from the Visual Studio Code Terminal:**
+  - Open Visual Studio Code.
+  - Press Ctrl+` to open the integrated terminal.
+  - Navigate to the project directory.
   - Run the following commands:
     ```bash
-    Add-Migration InitialCreate
-    Update-Database
+    dotnet ef migrations add InitialCreate
+    dotnet ef database update
     ```
     This will generate a migration file based on your model and apply the migration to create the database.
 
-**Performing CRUD Operations:**
-
-- **Adding and Updating Data:**
-  - Add new entities or update existing ones and persist the changes to the database.
-
-```csharp
-// Adding and Updating Data
-// Create a new DbContext instance
-using (var context = new Testdb())
-{
-    // Add a new user to the "Users" table
-    var newUser = new User { FirstName = "Jane", LastName = "Doe" };
-    context.Users.Add(newUser);
-
-    // Update an existing user in the "Users" table (if one existed)
-    var existingUser = context.Users.Find(1); //Using the Id
-    existingUser.LastName = "UpdatedLastName";
-
-    // Save changes to the database
-    context.SaveChanges();
-}
-```
+## Performing CRUD Operations:
 
 - **Querying Data:**
+
   - Use LINQ to query data from the database.
 
-```csharp
-// Querying Data
-// Create a new DbContext instance
-using (var context = new Testdb())
-{
-    // Use LINQ to query data from the "Users" table
-    var users = context.Users.Where(u => u.FirstName == "Jane").ToList();
-}
-```
+- **Adding and Updating Data:**
+
+  - Add new entities or update existing ones and persist the changes to the database.
 
 - **Deleting Data:**
   - Remove entities from the database.
 
-```csharp
-// Deleting Data
-// Create a new DbContext instance
-using (var context = new Testdb())
-{
-    // Find the user with Id = 1 in the "Users" table
-    var userToDelete = context.Users.Find(1);
+## Exercise Problems:
 
-    // Remove the user from the "Users" table
-    context.Users.Remove(userToDelete);
+1. **Exercise 1:**
 
-    // Save changes to the database
-    context.SaveChanges();
-}
-```
+   - Create a new console application and set up a `DbContext` class representing a simple "Product" entity with properties like Id, Name, and Price. Perform the following actions:
+     - Add three products to the database.
+     - Query and display the products with a price higher than a specified value.
 
-**Exercise Problems:**
+2. **Exercise 2:**
 
-**Exercise 1:**
+   - Extend the previous application to update the price of one of the products. After updating, query and display all products in the database.
 
-- Create a new console application and set up a `DbContext` class representing a simple "Product" entity with properties like Id, Name, and Price. Perform the following actions:
-  - Add three products to the database.
-  - Query and display the products with a price higher than a specified value.
-
-**Exercise 2:**
-
-- Extend the previous application to update the price of one of the products. After updating, query and display all products in the database.
-
-**Exercise 3:**
-
-- Implement a deletion operation in the application. Choose one of the products and delete it from the database. Query and display the remaining products.
-
-Feel free to explore additional features of Entity Framework to enhance your understanding.
+3. **Exercise 3:**
+   - Implement a deletion operation in the application. Choose one of the products and delete it from the database. Query and display the remaining products.
