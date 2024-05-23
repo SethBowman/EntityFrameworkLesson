@@ -130,8 +130,8 @@ public class User
     public int Id { get; set; }
 
     // Represents columns in the "Users" table
-    public string FirstName { get; set;
-    public string Last Name { get; set;
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
 }
 ```
 
@@ -198,18 +198,41 @@ appsettings.json
 
 ## Performing CRUD Operations:
 
-- **Querying Data:**
+- **Adding Users:**
+  - In your `Program.cs`, add the following code to add users to the database:
 
-  - Use LINQ to query data from the database.
+```csharp
+using EntityFrameworkTesting;
 
-- **Adding and Updating Data:**
+// Create a new instance of the Testdb context
+using (var dbContext = new Testdb())
+{
+    // Create new User objects
+    var user1 = new User
+    {
+        FirstName = "Seth",
+        LastName = "Bowman"
+    };
 
-  - Add new entities or update existing ones and persist the changes to the database.
+    var user2 = new User
+    {
+        FirstName = "Mack",
+        LastName = "McCall"
+    };
 
-- **Deleting Data:**
-  - Remove entities from the database.
+    // Add the new Users to the Users DbSet
+    dbContext.Users.Add(user1);
+    dbContext.Users.Add(user2);
 
-## Program.cs (Example of Updating a User):
+    // Save changes to the database
+    dbContext.SaveChanges();
+
+    Console.WriteLine("Users added successfully!");
+}
+```
+
+- **Updating a User:**
+  - Add the following code to update a user in the database:
 
 ```csharp
 using EntityFrameworkTesting;
@@ -233,6 +256,40 @@ using (var dbContext = new Testdb())
         dbContext.SaveChanges();
 
         Console.WriteLine("User updated successfully!");
+    }
+    else
+    {
+        Console.WriteLine("User with ID 2 not found!");
+    }
+}
+```
+
+- **Deleting a User:**
+  - Add the following code to delete a user from the database:
+
+```csharp
+using EntityFrameworkTesting;
+using System;
+using System.Linq;
+
+// Create a new instance of the Testdb context
+using (var dbContext = new Testdb())
+{
+
+
+    // Retrieve the user with ID 2 from the database
+    var userToDelete = dbContext.Users.FirstOrDefault(u => u.Id == 2);
+
+    // Check if the user exists
+    if (userToDelete != null)
+    {
+        // Remove the user from the Users DbSet
+        dbContext.Users.Remove(userToDelete);
+
+        // Save changes to the database
+        dbContext.SaveChanges();
+
+        Console.WriteLine("User deleted successfully!");
     }
     else
     {
